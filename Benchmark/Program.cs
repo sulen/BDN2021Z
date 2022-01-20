@@ -26,23 +26,5 @@ namespace Benchmark
         }
     }
 
-    public class OrdersBenchmark
-    {
-        public readonly DatabaseContext _dbContext;
-        public readonly IMapper _mapper;
 
-        public OrdersBenchmark()
-        {
-            var contextFactory = new DatabaseContextFactory();
-            _dbContext = contextFactory.CreateDbContext(Array.Empty<string>());
-            _mapper = new Mock<IMapper>().Object;
-        }
-
-        [Benchmark]
-        public async Task GetOrdersQuery()
-        {
-            var ordersService = new OrderService(_dbContext, _mapper);
-            await ordersService.GetOrders("ANATR");
-        }
-    }
 }

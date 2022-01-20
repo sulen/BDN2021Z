@@ -10,6 +10,7 @@ namespace Northwind.Service
 
             service.AddTransient<ICustomerService, CustomerService>();
             service.AddTransient<IOrderService, OrderService>();
+            service.AddTransient<ProductService>();
 
             return service;
         }

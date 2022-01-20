@@ -1,21 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using System;
-using System.Collections.Concurrent;
-using System.Data.Common;
-using System.Diagnostics;
-using System.Text;
 
 namespace Northwind.Domain
 {
     public class DatabaseContext : DbContext
     {
-
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
-            
         }
 
         public virtual DbSet<Customer> Customers { get; set; }
@@ -25,23 +17,17 @@ namespace Northwind.Domain
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
 
+        public DbSet<QuarterProductSales> QuarterProductSales { get; set; }
 
         public virtual DbSet<CustomerDemographic> CustomerDemographics { get; set; }
-
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.LogTo(Console.WriteLine, LogLevel.Error);
         }
 
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //builder.Entity<CustomerCustomerDemo>()
-            //    .HasOne(c => c.CustomerType)
-            //    .WithMany(x => x.CustomerCustomerDemos)
-            //    .HasForeignKey(x => x.CustomerTypeId);
-
             builder.Entity<CustomerCustomerDemo>()
                 .HasOne(c => c.Customer)
                 .WithMany(x => x.CustomerCustomerDemos)
@@ -62,11 +48,16 @@ namespace Northwind.Domain
                 .WithOne(x => x.ShipViaNavigation)
                 .HasForeignKey(x => x.ShipVia);
 
-            //builder.Entity<Customer>()
-            //    .Property(x => x.Id).HasColumnName("customer_id");
-
-            //builder.Entity<CustomerDemographic>()
-            //.ToTable("customer_demographics");
+            builder.Entity<QuarterProductSales>().HasNoKey();
         }
+    }
+
+    public class QuarterProductSales
+    {
+        public string CategoryName { get; set; }
+        public string ProductName { get; set; }
+        public float ProductSales { get; set; }
+        public string ShippedQuarter { get; set; }
+
     }
 }

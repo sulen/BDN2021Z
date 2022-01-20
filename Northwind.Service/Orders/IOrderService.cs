@@ -6,7 +6,7 @@ namespace Northwind.Service
 {
     public interface IOrderService
     {
-        Task<IEnumerable<Order>> GetOrders(string customerId);
+        Task<IEnumerable<Order>> GetOrdersSplitQuery(string customerId);
         Task<Order> AddOrder(OrderDto orderDto);
     }
 }

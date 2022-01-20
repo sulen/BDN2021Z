@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 #nullable disable
 
@@ -25,6 +26,7 @@ namespace Northwind.Domain
         public string Fax { get; set; }
         public string Homepage { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<Product> Products { get; set; }
     }
 }

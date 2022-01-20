@@ -16,7 +16,7 @@ namespace Northwind.WebApi.Controllers
         [HttpGet("{customerId}")]
         public async Task<ActionResult> GetOrders(string customerId)
         {
-            var result = await _orderService.GetOrders(customerId);
+            var result = await _orderService.GetOrdersSplitQuery(customerId);
             return Ok(result);
         }
 
