@@ -23,7 +23,7 @@ namespace Northwind.Domain
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Error);
+            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Debug);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

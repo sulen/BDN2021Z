@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Northwind.Domain;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Northwind.Service
@@ -18,10 +19,22 @@ namespace Northwind.Service
             _mapper = mapper;
         }
 
-        public async Task<Customer> GetCustomer(string customerId)
+        public async Task<CustomerDto> GetCustomer(string customerId)
         {
             var customer = await _dbContext.Customers.FirstOrDefaultAsync(x => x.CustomerId == customerId);
-            return customer;
+
+            return _mapper.Map<CustomerDto>(customer);
+        }
+
+        public async Task<IEnumerable<Customer>> GetCustomers()
+        {
+            var customers = await _dbContext.Customers
+                .Include(x => x.CustomerCustomerDemos)
+                    .ThenInclude(x => x.CustomerType)
+                .Include(x => x.Orders)
+                .Take(10)
+                .ToListAsync();
+            return customers;
         }
 
         public async Task<IEnumerable<Customer>> GetCustomersSingle()
@@ -61,14 +74,15 @@ namespace Northwind.Service
             {
                 throw new ArgumentException("Customer does not exist");
             }
-            customer = _mapper.Map<Customer>(customerDto);
+            _mapper.Map(customerDto, customer);
             await _dbContext.SaveChangesAsync();
             return customer;
         }
 
         public async Task<Customer> DeleteCustomer(string customerId)
         {
-            var customer = await _dbContext.Customers.FirstOrDefaultAsync(x => x.CustomerId == customerId);
+            var customer = await _dbContext.Customers
+                .Include(x => x.Orders).FirstOrDefaultAsync(x => x.CustomerId == customerId);
             if (customer is null)
             {
                 throw new ArgumentException("Customer does not exist");

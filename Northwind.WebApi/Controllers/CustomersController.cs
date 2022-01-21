@@ -25,7 +25,7 @@ namespace Northwind.WebApi.Controllers
         [HttpGet()]
         public async Task<ActionResult> GetCustomers()
         {
-            var result = await _customerService.GetCustomersSingle();
+            var result = await _customerService.GetCustomers();
             return result is null
                 ? NotFound() :
                 Ok(result);

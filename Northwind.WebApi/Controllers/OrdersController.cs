@@ -23,7 +23,7 @@ namespace Northwind.WebApi.Controllers
         [HttpGet()]
         public async Task<ActionResult> GetAllOrders()
         {
-            var result = await _orderService.GetAllOrdersSingleQuery();
+            var result = await _orderService.GetAllOrders();
             return Ok(result);
         }
 

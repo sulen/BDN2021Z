@@ -18,6 +18,20 @@ namespace Northwind.Service
             _mapper = mapper;
         }
 
+        public async Task<IEnumerable<Order>> GetAllOrders()
+        {
+            var orders = await _dbContext.Orders
+                .Include(x => x.OrderDetails)
+                    .ThenInclude(x => x.Product.Category)
+                .Include(x => x.OrderDetails)
+                    .ThenInclude(x => x.Product.Supplier)
+                .Include(x => x.Customer.CustomerCustomerDemos)
+                    .ThenInclude(x => x.CustomerType)
+                .Take(50)
+                .ToListAsync();
+            return orders;
+        }
+
         public async Task<IEnumerable<Order>> GetAllOrdersSplitQuery()
         {
             var orders = await _dbContext.Orders
@@ -28,7 +42,6 @@ namespace Northwind.Service
                 .Include(x => x.Customer.CustomerCustomerDemos)
                     .ThenInclude(x => x.CustomerType)
                 .AsSplitQuery()
-                //.AsNoTracking()
                 .ToListAsync();
             return orders;
         }
@@ -43,7 +56,21 @@ namespace Northwind.Service
                 .Include(x => x.Customer.CustomerCustomerDemos)
                     .ThenInclude(x => x.CustomerType)
                 .AsSingleQuery()
-                //.AsNoTracking()
+                .ToListAsync();
+            return orders;
+        }
+
+        public async Task<IEnumerable<Order>> GetOrders(string customerId)
+        {
+            var orders = await _dbContext.Orders
+                .Include(x => x.OrderDetails)
+                    .ThenInclude(x => x.Product.Category)
+                .Include(x => x.OrderDetails)
+                    .ThenInclude(x => x.Product.Supplier)
+                .Include(x => x.Customer.CustomerCustomerDemos)
+                    .ThenInclude(x => x.CustomerType)
+                .Where(x => x.CustomerId == customerId)
+                .Take(50)
                 .ToListAsync();
             return orders;
         }
@@ -59,7 +86,6 @@ namespace Northwind.Service
                     .ThenInclude(x => x.CustomerType)
                 .Where(x => x.CustomerId == customerId)
                 .AsSplitQuery()
-                .AsNoTracking()
                 .ToListAsync();
             return orders;
         }
@@ -75,7 +101,6 @@ namespace Northwind.Service
                     .ThenInclude(x => x.CustomerType)
                 .Where(x => x.CustomerId == customerId)
                 .AsSingleQuery()
-                .AsNoTracking()
                 .ToListAsync();
             return orders;
         }
