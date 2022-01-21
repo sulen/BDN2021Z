@@ -48,6 +48,10 @@ namespace Northwind.Domain
                 .WithOne(x => x.ShipViaNavigation)
                 .HasForeignKey(x => x.ShipVia);
 
+            builder.Entity<Order>()
+                .Property(p => p.ShippedDate)
+                .IsConcurrencyToken();
+
             builder.Entity<QuarterProductSales>().HasNoKey();
         }
     }

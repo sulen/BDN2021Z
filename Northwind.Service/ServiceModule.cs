@@ -6,10 +6,8 @@ namespace Northwind.Service
     {
         public static IServiceCollection AddServiceModule(this IServiceCollection service)
         {
-            service.AddAutoMapper(typeof(ServiceModule));
-
-            service.AddTransient<ICustomerService, CustomerService>();
-            service.AddTransient<IOrderService, OrderService>();
+            service.AddTransient<CustomerService>();
+            service.AddTransient<OrderService>();
             service.AddTransient<ProductService>();
 
             return service;

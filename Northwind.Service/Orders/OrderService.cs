@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Northwind.Service
 {
-    public class OrderService : IOrderService
+    public class OrderService
     {
         private readonly DatabaseContext _dbContext;
         private readonly IMapper _mapper;
@@ -82,7 +82,10 @@ namespace Northwind.Service
 
         public async Task<Order> AddOrder(OrderDto orderDto)
         {
+            var id = await _dbContext.Orders.Select(x => x.OrderId).MaxAsync();
+
             var order = _mapper.Map<Order>(orderDto);
+            order.OrderId = (short)(id + 1);
             foreach (var product in orderDto.Products)
             {
                 order.OrderDetails.Add(new OrderDetail
@@ -91,6 +94,24 @@ namespace Northwind.Service
                     Quantity = product.Quantity,
                 });
             }
+            await _dbContext.Orders.AddAsync(order);
+            await _dbContext.SaveChangesAsync();
+            return order;
+        }
+
+        public async Task<Order> CopyOrder(short orderId)
+        {
+            var order = await _dbContext.Orders
+                .Include(x => x.OrderDetails)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.OrderId == orderId);
+            var id = await _dbContext.Orders.Select(x => x.OrderId).MaxAsync();
+            order.OrderId = (short)(id + 1);
+            foreach (var orderDetail in order.OrderDetails)
+            {
+                orderDetail.OrderId = order.OrderId;
+            }
+
             await _dbContext.Orders.AddAsync(order);
             await _dbContext.SaveChangesAsync();
             return order;

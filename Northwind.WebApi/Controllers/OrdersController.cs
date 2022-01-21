@@ -6,9 +6,9 @@ namespace Northwind.WebApi.Controllers
 {
     public class OrdersController : BaseController
     {
-        private readonly IOrderService _orderService;
+        private readonly OrderService _orderService;
 
-        public OrdersController(IOrderService orderService)
+        public OrdersController(OrderService orderService)
         {
             _orderService = orderService;
         }
@@ -20,10 +20,24 @@ namespace Northwind.WebApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet()]
+        public async Task<ActionResult> GetAllOrders()
+        {
+            var result = await _orderService.GetAllOrdersSingleQuery();
+            return Ok(result);
+        }
+
         [HttpPost()]
         public async Task<ActionResult> AddOrder([FromBody] OrderDto orderDto)
         {
             var result = await _orderService.AddOrder(orderDto);
+            return Ok(result);
+        }
+
+        [HttpPost("copy")]
+        public async Task<ActionResult> CopyOrder(short orderId)
+        {
+            var result = await _orderService.CopyOrder(orderId);
             return Ok(result);
         }
     }

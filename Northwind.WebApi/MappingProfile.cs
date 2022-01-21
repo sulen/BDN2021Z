@@ -10,6 +10,7 @@ namespace Northwind.WebApi
         {
             CreateMap<Customer, CustomerDto>();
             CreateMap<CustomerDto, Customer>();
+            CreateMap<OrderDto, Order>();
 
         }
     }

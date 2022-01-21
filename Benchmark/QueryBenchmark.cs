@@ -4,9 +4,6 @@ using Moq;
 using Northwind.Domain;
 using Northwind.Service;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Benchmark
@@ -69,6 +66,27 @@ namespace Benchmark
         {
             var ordersService = new ProductService(_dbContext);
             await ordersService.GetQuarterProductSales();
+        }
+
+        [Benchmark]
+        public async Task GetQuarterProductSalesLinq()
+        {
+            var ordersService = new ProductService(_dbContext);
+            await ordersService.GetQuarterProductSalesLinq();
+        }
+
+        [Benchmark]
+        public async Task GetCustomersSingle()
+        {
+            var ordersService = new CustomerService(_dbContext, _mapper);
+            await ordersService.GetCustomersSingle();
+        }
+
+        [Benchmark]
+        public async Task GetCustomersSplit()
+        {
+            var ordersService = new CustomerService(_dbContext, _mapper);
+            await ordersService.GetCustomersSplit();
         }
     }
 }

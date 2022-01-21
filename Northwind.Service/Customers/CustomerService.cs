@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Northwind.Service
 {
-    public class CustomerService : ICustomerService
+    public class CustomerService
     {
         private readonly DatabaseContext _dbContext;
         private readonly IMapper _mapper;
@@ -24,11 +24,24 @@ namespace Northwind.Service
             return customer;
         }
 
-        public async Task<IEnumerable<Customer>> GetCustomers()
+        public async Task<IEnumerable<Customer>> GetCustomersSingle()
         {
             var customers = await _dbContext.Customers
                 .Include(x => x.CustomerCustomerDemos)
                     .ThenInclude(x => x.CustomerType)
+                .Include(x => x.Orders)
+                .AsSingleQuery()
+                .ToListAsync();
+            return customers;
+        }
+
+        public async Task<IEnumerable<Customer>> GetCustomersSplit()
+        {
+            var customers = await _dbContext.Customers
+                .Include(x => x.CustomerCustomerDemos)
+                    .ThenInclude(x => x.CustomerType)
+                .Include(x => x.Orders)
+                .AsSplitQuery()
                 .ToListAsync();
             return customers;
         }

@@ -6,9 +6,9 @@ namespace Northwind.WebApi.Controllers
 {
     public class CustomersController : BaseController
     {
-        private readonly ICustomerService _customerService;
+        private readonly CustomerService _customerService;
 
-        public CustomersController(ICustomerService customerService)
+        public CustomersController(CustomerService customerService)
         {
             _customerService = customerService;
         }
@@ -25,7 +25,7 @@ namespace Northwind.WebApi.Controllers
         [HttpGet()]
         public async Task<ActionResult> GetCustomers()
         {
-            var result = await _customerService.GetCustomers();
+            var result = await _customerService.GetCustomersSingle();
             return result is null
                 ? NotFound() :
                 Ok(result);

@@ -8,7 +8,7 @@ namespace Northwind.Service
 {
     public record OrderDto
     {
-        public short OrderId { get; set; }
+        //public short OrderId { get; set; }
         public string CustomerId { get; set; }
         public short? EmployeeId { get; set; }
         public DateTime? OrderDate { get; set; }
