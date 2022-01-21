@@ -66,7 +66,7 @@ namespace Northwind.Service
                          join b in _dbContext.Products on a.CategoryId equals b.CategoryId
                          join c in _dbContext.OrderDetails on b.ProductId equals c.ProductId
                          join d in _dbContext.Orders on c.OrderId equals d.OrderId
-                         where d.ShippedDate > new DateTime(1997, 1, 01) && d.ShippedDate < new DateTime(1997, 1, 01)
+                         where d.ShippedDate > new DateTime(1997, 1, 01) && d.ShippedDate < new DateTime(1997, 12, 31)
                          group new { a, b, c } by new { a.CategoryName, b.ProductName, c.UnitPrice, c.Quantity, d.ShippedDate } into g
                          orderby g.Key.CategoryName
                          select new { g.Key.CategoryName, g.Key.ProductName, ProductSales = g.Key.UnitPrice * g.Key.Quantity, ShippedQuarter = $"Qtr {(g.Key.ShippedDate.Value.Month + 2) / 3}" };

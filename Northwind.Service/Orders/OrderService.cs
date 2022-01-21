@@ -107,8 +107,9 @@ namespace Northwind.Service
 
         public async Task<Order> AddOrder(OrderDto orderDto)
         {
-            var id = await _dbContext.Orders.Select(x => x.OrderId).MaxAsync();
+            using var transaction = _dbContext.Database.BeginTransaction();
 
+            var id = await _dbContext.Orders.Select(x => x.OrderId).MaxAsync();
             var order = _mapper.Map<Order>(orderDto);
             order.OrderId = (short)(id + 1);
             foreach (var product in orderDto.Products)
@@ -121,6 +122,8 @@ namespace Northwind.Service
             }
             await _dbContext.Orders.AddAsync(order);
             await _dbContext.SaveChangesAsync();
+            transaction.Commit();
+
             return order;
         }
 

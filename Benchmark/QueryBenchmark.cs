@@ -49,6 +49,20 @@ namespace Benchmark
         }
 
         [Benchmark]
+        public async Task GetCustomersSingleQuery()
+        {
+            var ordersService = new CustomerService(_dbContext, _mapper);
+            await ordersService.GetCustomersSingle();
+        }
+
+        [Benchmark]
+        public async Task GetCustomersSplitQuery()
+        {
+            var ordersService = new CustomerService(_dbContext, _mapper);
+            await ordersService.GetCustomersSplit();
+        }
+
+        [Benchmark]
         public async Task GetProductsQuery()
         {
             var ordersService = new ProductService(_dbContext);
@@ -75,18 +89,6 @@ namespace Benchmark
             await ordersService.GetQuarterProductSalesLinq();
         }
 
-        [Benchmark]
-        public async Task GetCustomersSingle()
-        {
-            var ordersService = new CustomerService(_dbContext, _mapper);
-            await ordersService.GetCustomersSingle();
-        }
 
-        [Benchmark]
-        public async Task GetCustomersSplit()
-        {
-            var ordersService = new CustomerService(_dbContext, _mapper);
-            await ordersService.GetCustomersSplit();
-        }
     }
 }
