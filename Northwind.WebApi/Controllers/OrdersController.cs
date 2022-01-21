@@ -20,7 +20,7 @@ namespace Northwind.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet()]
+        [HttpPost()]
         public async Task<ActionResult> AddOrder([FromBody] OrderDto orderDto)
         {
             var result = await _orderService.AddOrder(orderDto);

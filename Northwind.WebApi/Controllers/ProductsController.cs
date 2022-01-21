@@ -14,7 +14,7 @@ namespace Northwind.WebApi.Controllers
         }
 
         [HttpGet()]
-        public async Task<ActionResult> GetOrders([FromQuery] ProductQueryDto productQueryDto)
+        public async Task<ActionResult> GetProducts([FromQuery] ProductQueryDto productQueryDto)
         {
             var result = await _productService.GetFilteredProducts(productQueryDto);
             return Ok(result);
