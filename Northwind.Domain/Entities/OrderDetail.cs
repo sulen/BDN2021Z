@@ -8,7 +8,6 @@ namespace Northwind.Domain
 {
     public partial class OrderDetail
     {
-        [Key]
         public short OrderId { get; set; }
         public short ProductId { get; set; }
         public float UnitPrice { get; set; }

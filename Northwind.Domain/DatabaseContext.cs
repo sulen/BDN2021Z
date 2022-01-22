@@ -43,6 +43,9 @@ namespace Northwind.Domain
                 .WithMany(x => x.OrderDetails)
                 .HasForeignKey(x => x.OrderId);
 
+            builder.Entity<OrderDetail>()
+                .HasKey(x => new { x.OrderId, x.ProductId });
+         
             builder.Entity<Shipper>()
                 .HasMany(c => c.Orders)
                 .WithOne(x => x.ShipViaNavigation)
